@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-from PIL import Image
-from transformers import AutoTokenizer, AutoModel, AutoImageProcessor, AutoModelForCausalLM
-from transformers.generation.configuration_utils import GenerationConfig
 import torch
+from PIL import Image
+from transformers import AutoImageProcessor, AutoModel, AutoModelForCausalLM, AutoTokenizer
+from transformers.generation.configuration_utils import GenerationConfig
 
 from emu3.mllm.processing_emu3 import Emu3Processor
-
 
 # model path
 EMU_HUB = "BAAI/Emu3-Chat"
@@ -41,7 +40,8 @@ inputs = processor(
 )
 
 # prepare hyper parameters
-GENERATION_CONFIG = GenerationConfig(pad_token_id=tokenizer.pad_token_id, bos_token_id=tokenizer.bos_token_id, eos_token_id=tokenizer.eos_token_id)
+GENERATION_CONFIG = GenerationConfig(pad_token_id=tokenizer.pad_token_id, bos_token_id=tokenizer.bos_token_id,
+                                     eos_token_id=tokenizer.eos_token_id)
 
 # generate
 outputs = model.generate(

@@ -24,7 +24,6 @@ from typing import Optional
 from transformers.configuration_utils import PretrainedConfig
 from transformers.utils import logging
 
-
 logger = logging.get_logger(__name__)
 
 EMU3_PRETRAINED_CONFIG_ARCHIVE_MAP = {}
@@ -126,33 +125,33 @@ class Emu3Config(PretrainedConfig):
     keys_to_ignore_at_inference = ["past_key_values"]
 
     def __init__(
-        self,
-        vocab_size: int = 184622,
-        hidden_size: int = 4096,
-        intermediate_size: int = 14336,
-        num_hidden_layers: int = 32,
-        num_attention_heads: int = 32,
-        num_key_value_heads: Optional[int] = 8,
-        hidden_act: str = "silu",
-        max_position_embeddings: int = 9216,
-        initializer_range: float = 0.02,
-        rms_norm_eps: float = 1e-5,
-        use_cache: bool = True,
-        pad_token_id: int = 151643,
-        bos_token_id: int = 151849,
-        eos_token_id: int = 151850,
-        img_token_id: int = 151851,
-        boi_token_id: int = 151852,
-        eoi_token_id: int = 151853,
-        eol_token_id: int = 151846,
-        eof_token_id: int = 151847,
-        image_area: int = 720 * 720, 
-        pretraining_tp: int = 1,
-        tie_word_embeddings: bool = False,
-        rope_theta: float = 1000000.0,
-        rope_scaling: Optional = None,
-        attention_dropout: float = 0.1,
-        **kwargs,
+            self,
+            vocab_size: int = 184622,
+            hidden_size: int = 4096,
+            intermediate_size: int = 14336,
+            num_hidden_layers: int = 32,
+            num_attention_heads: int = 32,
+            num_key_value_heads: Optional[int] = 8,
+            hidden_act: str = "silu",
+            max_position_embeddings: int = 9216,
+            initializer_range: float = 0.02,
+            rms_norm_eps: float = 1e-5,
+            use_cache: bool = True,
+            pad_token_id: int = 151643,
+            bos_token_id: int = 151849,
+            eos_token_id: int = 151850,
+            img_token_id: int = 151851,
+            boi_token_id: int = 151852,
+            eoi_token_id: int = 151853,
+            eol_token_id: int = 151846,
+            eof_token_id: int = 151847,
+            image_area: int = 720 * 720,
+            pretraining_tp: int = 1,
+            tie_word_embeddings: bool = False,
+            rope_theta: float = 1000000.0,
+            rope_scaling: Optional = None,
+            attention_dropout: float = 0.1,
+            **kwargs,
     ):
         self.vocab_size = vocab_size
         self.max_position_embeddings = max_position_embeddings

@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from PIL import Image
-from transformers import AutoTokenizer, AutoModel, AutoImageProcessor, AutoModelForCausalLM
-from transformers.generation.configuration_utils import GenerationConfig
-from transformers.generation import LogitsProcessorList, PrefixConstrainedLogitsProcessor, UnbatchedClassifierFreeGuidanceLogitsProcessor
 import torch
+from PIL import Image
+from transformers import AutoImageProcessor, AutoModel, AutoModelForCausalLM, AutoTokenizer
+from transformers.generation import LogitsProcessorList, PrefixConstrainedLogitsProcessor, \
+    UnbatchedClassifierFreeGuidanceLogitsProcessor
+from transformers.generation.configuration_utils import GenerationConfig
 
 from emu3.mllm.processing_emu3 import Emu3Processor
-
 
 # model path
 EMU_HUB = "BAAI/Emu3-Gen"
@@ -65,7 +65,7 @@ logits_processor = LogitsProcessorList([
         unconditional_ids=neg_inputs.input_ids.to("cuda:0"),
     ),
     PrefixConstrainedLogitsProcessor(
-        constrained_fn ,
+        constrained_fn,
         num_beams=1,
     ),
 ])

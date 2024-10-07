@@ -19,7 +19,6 @@ from transformers.utils import (
     is_torch_available,
 )
 
-
 _import_structure = {
     "configuration_emu3": ["Emu3Config"],
     "tokenization_emu3": ["Emu3Tokenizer"],

@@ -21,10 +21,9 @@ import unicodedata
 from typing import Collection, Dict, List, Optional, Set, Tuple, Union
 
 import tiktoken
-from transformers import PreTrainedTokenizer, AddedToken
+from transformers import AddedToken, PreTrainedTokenizer
 
 logger = logging.getLogger(__name__)
-
 
 VOCAB_FILES_NAMES = {
     "vocab_file": "emu3.tiktoken",
@@ -58,25 +57,25 @@ class Emu3Tokenizer(PreTrainedTokenizer):
     vocab_files_names = VOCAB_FILES_NAMES
 
     def __init__(
-        self,
-        vocab_file,
-        special_tokens_file,
-        errors="replace",
-        bos_token = "<|extra_203|>",
-        eos_token = "<|extra_204|>",
-        pad_token = "<|endoftext|>",
-        img_token = "<|image token|>",
-        boi_token = "<|image start|>",
-        eoi_token = "<|image end|>",
-        eol_token = "<|extra_200|>",
-        eof_token = "<|extra_201|>",
-        **kwargs,
+            self,
+            vocab_file,
+            special_tokens_file,
+            errors="replace",
+            bos_token="<|extra_203|>",
+            eos_token="<|extra_204|>",
+            pad_token="<|endoftext|>",
+            img_token="<|image token|>",
+            boi_token="<|image start|>",
+            eoi_token="<|image end|>",
+            eol_token="<|extra_200|>",
+            eof_token="<|extra_201|>",
+            **kwargs,
     ):
         super().__init__(**kwargs)
 
         # how to handle errors in decoding UTF-8 byte sequences
         # use ignore if you are in streaming inference
-        self.errors = errors  
+        self.errors = errors
 
         self.mergeable_ranks = _load_tiktoken_bpe(vocab_file)
 
@@ -84,13 +83,13 @@ class Emu3Tokenizer(PreTrainedTokenizer):
         SPECIAL_TOKENS = tuple(
             enumerate(
                 (
-                    (
-                        ENDOFTEXT,
-                        IMSTART,
-                        IMEND,
-                    )
-                    + EXTRAS
-                    + tuple(vision_tokens)
+                        (
+                            ENDOFTEXT,
+                            IMSTART,
+                            IMEND,
+                        )
+                        + EXTRAS
+                        + tuple(vision_tokens)
                 ),
                 start=SPECIAL_START_ID,
             )
@@ -106,7 +105,7 @@ class Emu3Tokenizer(PreTrainedTokenizer):
         )
 
         assert (
-            len(self.mergeable_ranks) + len(self.special_tokens) == enc.n_vocab
+                len(self.mergeable_ranks) + len(self.special_tokens) == enc.n_vocab
         ), f"{len(self.mergeable_ranks) + len(self.special_tokens)} != {enc.n_vocab} in encoding"
 
         self.decoder = {
@@ -150,7 +149,7 @@ class Emu3Tokenizer(PreTrainedTokenizer):
         return self.mergeable_ranks
 
     def convert_tokens_to_ids(
-        self, tokens: Union[bytes, str, List[Union[bytes, str]]]
+            self, tokens: Union[bytes, str, List[Union[bytes, str]]]
     ) -> List[int]:
         if isinstance(tokens, (str, bytes)):
             if tokens in self.special_tokens:
@@ -167,9 +166,9 @@ class Emu3Tokenizer(PreTrainedTokenizer):
         return ids
 
     def _add_tokens(
-        self,
-        new_tokens: Union[List[str], List[AddedToken]],
-        special_tokens: bool = False,
+            self,
+            new_tokens: Union[List[str], List[AddedToken]],
+            special_tokens: bool = False,
     ) -> int:
         if not special_tokens and new_tokens:
             raise ValueError("Adding regular tokens is not supported")
@@ -189,7 +188,7 @@ class Emu3Tokenizer(PreTrainedTokenizer):
             `Tuple(str)`: Paths to the files saved.
         """
         regular_file_path = os.path.join(save_directory, self.vocab_files_names["vocab_file"])
-        with open(regular_file_path,'w', encoding="utf8") as w:
+        with open(regular_file_path, 'w', encoding="utf8") as w:
             for k, v in self.mergeable_ranks.items():
                 line = base64.b64encode(k).decode("utf8") + " " + str(v) + "\n"
                 w.write(line)
@@ -204,11 +203,11 @@ class Emu3Tokenizer(PreTrainedTokenizer):
         return (regular_file_path, special_file_path)
 
     def tokenize(
-        self,
-        text: str,
-        allowed_special: Union[Set, str] = "all",
-        disallowed_special: Union[Collection, str] = (),
-        **kwargs,
+            self,
+            text: str,
+            allowed_special: Union[Set, str] = "all",
+            disallowed_special: Union[Collection, str] = (),
+            **kwargs,
     ) -> List[Union[bytes, str]]:
         """
         Converts a string in a sequence of tokens.
@@ -234,7 +233,7 @@ class Emu3Tokenizer(PreTrainedTokenizer):
 
         # this implementation takes a detour: text -> token id -> token surface forms
         for t in self.tokenizer.encode(
-            text, allowed_special=allowed_special, disallowed_special=disallowed_special
+                text, allowed_special=allowed_special, disallowed_special=disallowed_special
         ):
             tokens.append(self.decoder[t])
 
@@ -279,11 +278,11 @@ class Emu3Tokenizer(PreTrainedTokenizer):
         raise ValueError("unknown token")
 
     def _decode(
-        self,
-        token_ids: Union[int, List[int]],
-        skip_special_tokens: bool = False,
-        errors: Optional[str] = None,
-        **kwargs,
+            self,
+            token_ids: Union[int, List[int]],
+            skip_special_tokens: bool = False,
+            errors: Optional[str] = None,
+            **kwargs,
     ) -> str:
         if isinstance(token_ids, int):
             token_ids = [token_ids]

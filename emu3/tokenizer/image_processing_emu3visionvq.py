@@ -14,44 +14,30 @@
 # limitations under the License.
 """Image processor class for Emu3VisionVQ."""
 
-
 import math
-from typing import Dict, List, Optional, Union
+from typing import List, Optional, Union
 
 import numpy as np
-
 from transformers.image_processing_utils import BaseImageProcessor, BatchFeature
 from transformers.image_transforms import (
     convert_to_rgb,
     resize,
     to_channel_dimension_format,
 )
-from transformers.image_utils import (
-    IMAGENET_STANDARD_MEAN,
-    IMAGENET_STANDARD_STD,
-    ChannelDimension,
-    ImageInput,
-    PILImageResampling,
-    get_image_size,
-    infer_channel_dimension_format,
-    is_scaled_image,
-    make_list_of_images,
-    to_numpy_array,
-    valid_images,
-    validate_preprocess_arguments,
-)
+from transformers.image_utils import (ChannelDimension, IMAGENET_STANDARD_MEAN, IMAGENET_STANDARD_STD, ImageInput,
+                                      PILImageResampling, get_image_size, infer_channel_dimension_format,
+                                      is_scaled_image, make_list_of_images, to_numpy_array, valid_images,
+                                      validate_preprocess_arguments)
 from transformers.utils import TensorType, is_vision_available, logging
 
-
 logger = logging.get_logger(__name__)
-
 
 if is_vision_available():
     from PIL import Image
 
 
 def smart_resize(
-    height: int, width: int, factor: int = 8, min_pixels: int = 512 * 512, max_pixels: int = 1024 * 1024
+        height: int, width: int, factor: int = 8, min_pixels: int = 512 * 512, max_pixels: int = 1024 * 1024
 ):
     """Rescales the image so that the following conditions are met:
 
@@ -115,19 +101,19 @@ class Emu3VisionVQImageProcessor(BaseImageProcessor):
     model_input_names = ["pixel_values"]
 
     def __init__(
-        self,
-        do_resize: bool = True,
-        resample: PILImageResampling = PILImageResampling.BICUBIC,
-        do_rescale: bool = True,
-        rescale_factor: Union[int, float] = 1 / 255,
-        do_normalize: bool = True,
-        image_mean: Optional[Union[float, List[float]]] = None,
-        image_std: Optional[Union[float, List[float]]] = None,
-        do_convert_rgb: bool = True,
-        min_pixels: int = 512 * 512,
-        max_pixels: int = 1024 * 1024,
-        spatial_factor: int = 8,
-        **kwargs,
+            self,
+            do_resize: bool = True,
+            resample: PILImageResampling = PILImageResampling.BICUBIC,
+            do_rescale: bool = True,
+            rescale_factor: Union[int, float] = 1 / 255,
+            do_normalize: bool = True,
+            image_mean: Optional[Union[float, List[float]]] = None,
+            image_std: Optional[Union[float, List[float]]] = None,
+            do_convert_rgb: bool = True,
+            min_pixels: int = 512 * 512,
+            max_pixels: int = 1024 * 1024,
+            spatial_factor: int = 8,
+            **kwargs,
     ) -> None:
         super().__init__(**kwargs)
         self.do_resize = do_resize
@@ -144,19 +130,19 @@ class Emu3VisionVQImageProcessor(BaseImageProcessor):
         self.spatial_factor = spatial_factor
 
     def _preprocess(
-        self,
-        images: ImageInput,
-        do_resize: Optional[bool] = None,
-        resample: PILImageResampling = None,
-        do_rescale: Optional[bool] = None,
-        rescale_factor: Optional[float] = None,
-        do_normalize: Optional[bool] = None,
-        image_mean: Optional[Union[float, List[float]]] = None,
-        image_std: Optional[Union[float, List[float]]] = None,
-        do_convert_rgb: Optional[bool] = None,
-        spatial_factor: Optional[int] = None,
-        input_data_format: Optional[Union[str, ChannelDimension]] = None,
-        output_data_format: Optional[Union[str, ChannelDimension]] = ChannelDimension.FIRST,
+            self,
+            images: ImageInput,
+            do_resize: Optional[bool] = None,
+            resample: PILImageResampling = None,
+            do_rescale: Optional[bool] = None,
+            rescale_factor: Optional[float] = None,
+            do_normalize: Optional[bool] = None,
+            image_mean: Optional[Union[float, List[float]]] = None,
+            image_std: Optional[Union[float, List[float]]] = None,
+            do_convert_rgb: Optional[bool] = None,
+            spatial_factor: Optional[int] = None,
+            input_data_format: Optional[Union[str, ChannelDimension]] = None,
+            output_data_format: Optional[Union[str, ChannelDimension]] = ChannelDimension.FIRST,
     ):
         """
         Preprocess an image or batch of images. Copy of the `preprocess` method from `CLIPImageProcessor`.
@@ -243,20 +229,20 @@ class Emu3VisionVQImageProcessor(BaseImageProcessor):
         return image
 
     def preprocess(
-        self,
-        images: ImageInput,
-        do_resize: Optional[bool] = None,
-        resample: PILImageResampling = None,
-        do_rescale: Optional[bool] = None,
-        rescale_factor: Optional[float] = None,
-        do_normalize: Optional[bool] = None,
-        image_mean: Optional[Union[float, List[float]]] = None,
-        image_std: Optional[Union[float, List[float]]] = None,
-        do_convert_rgb: Optional[bool] = None,
-        spatial_factor: Optional[int] = None,
-        return_tensors: Optional[Union[str, TensorType]] = None,
-        input_data_format: Optional[Union[str, ChannelDimension]] = None,
-        output_data_format: Optional[Union[str, ChannelDimension]] = ChannelDimension.FIRST,
+            self,
+            images: ImageInput,
+            do_resize: Optional[bool] = None,
+            resample: PILImageResampling = None,
+            do_rescale: Optional[bool] = None,
+            rescale_factor: Optional[float] = None,
+            do_normalize: Optional[bool] = None,
+            image_mean: Optional[Union[float, List[float]]] = None,
+            image_std: Optional[Union[float, List[float]]] = None,
+            do_convert_rgb: Optional[bool] = None,
+            spatial_factor: Optional[int] = None,
+            return_tensors: Optional[Union[str, TensorType]] = None,
+            input_data_format: Optional[Union[str, ChannelDimension]] = None,
+            output_data_format: Optional[Union[str, ChannelDimension]] = ChannelDimension.FIRST,
     ):
         """
         Args:
@@ -349,15 +335,15 @@ class Emu3VisionVQImageProcessor(BaseImageProcessor):
         return BatchFeature(data=data, tensor_type=return_tensors)
 
     def postprocess(
-        self,
-        images: ImageInput,
-        do_rescale: Optional[bool] = None,
-        rescale_factor: Optional[float] = None,
-        do_normalize: Optional[bool] = None,
-        image_mean: Optional[Union[float, List[float]]] = None,
-        image_std: Optional[Union[float, List[float]]] = None,
-        return_tensors: str | TensorType = "PIL.Image.Image",
-        input_data_format: Optional[Union[str, ChannelDimension]] = None,
+            self,
+            images: ImageInput,
+            do_rescale: Optional[bool] = None,
+            rescale_factor: Optional[float] = None,
+            do_normalize: Optional[bool] = None,
+            image_mean: Optional[Union[float, List[float]]] = None,
+            image_std: Optional[Union[float, List[float]]] = None,
+            return_tensors: str | TensorType = "PIL.Image.Image",
+            input_data_format: Optional[Union[str, ChannelDimension]] = None,
     ):
         """
         Postprocess an image or batch of images tensor. Postprocess is the reverse process of preprocess.

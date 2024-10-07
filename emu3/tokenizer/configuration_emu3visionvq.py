@@ -19,7 +19,6 @@ from typing import List
 from transformers.configuration_utils import PretrainedConfig
 from transformers.utils import logging
 
-
 logger = logging.get_logger(__name__)
 
 
@@ -75,20 +74,20 @@ class Emu3VisionVQConfig(PretrainedConfig):
     model_type = "Emu3VisionVQ"
 
     def __init__(
-        self,
-        codebook_size: int = 32768,
-        embed_dim: int = 4,
-        z_channels: int = 4,
-        double_z: bool = False,
-        in_channels: int = 3,
-        out_channels: int = 3,
-        temporal_downsample_factor: int = 4,
-        ch: int = 256,
-        ch_mult: List[int] = [1, 2, 2, 4],
-        num_res_blocks: int = 2,
-        attn_resolutions: List[int] = [3],
-        dropout: float = 0.0,
-        **kwargs,
+            self,
+            codebook_size: int = 32768,
+            embed_dim: int = 4,
+            z_channels: int = 4,
+            double_z: bool = False,
+            in_channels: int = 3,
+            out_channels: int = 3,
+            temporal_downsample_factor: int = 4,
+            ch: int = 256,
+            ch_mult: List[int] = [1, 2, 2, 4],
+            num_res_blocks: int = 2,
+            attn_resolutions: List[int] = [3],
+            dropout: float = 0.0,
+            **kwargs,
     ):
         super().__init__(**kwargs)
 
