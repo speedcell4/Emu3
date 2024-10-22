@@ -2,30 +2,27 @@
 
 import base64
 import io
-from PIL import Image
 
 import gradio as gr
-from transformers import (
-    AutoTokenizer,
-    AutoModelForCausalLM,
-    AutoImageProcessor,
-    AutoModel,
-)
-from transformers.generation.configuration_utils import GenerationConfig
+import torch
+from PIL import Image
+from transformers import (AutoImageProcessor, AutoModel, AutoModelForCausalLM, AutoTokenizer)
 from transformers.generation import (
     LogitsProcessorList,
     PrefixConstrainedLogitsProcessor,
     UnbatchedClassifierFreeGuidanceLogitsProcessor,
 )
-import torch
+from transformers.generation.configuration_utils import GenerationConfig
 
 from emu3.mllm.processing_emu3 import Emu3Processor
+
 
 def image2str(image):
     buf = io.BytesIO()
     image.save(buf, format="PNG")
     i_str = base64.b64encode(buf.getvalue()).decode()
     return f'<div style="float:left"><img src="data:image/png;base64, {i_str}"></div>'
+
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -66,6 +63,7 @@ image_tokenizer.to(device)
 processor = Emu3Processor(
     image_processor, image_tokenizer, tokenizer
 )
+
 
 def generate_image(prompt):
     POSITIVE_PROMPT = " masterpiece, film grained, best quality."
@@ -132,8 +130,9 @@ def generate_image(prompt):
 
     gen_model.cpu()
     torch.cuda.empty_cache()
-    
+
     return result
+
 
 def vision_language_understanding(image, text):
     inputs = processor(
@@ -162,15 +161,15 @@ def vision_language_understanding(image, text):
         generation_config=GENERATION_CONFIG,
     )
 
-    outputs = outputs[:, inputs.input_ids.shape[-1] :]
+    outputs = outputs[:, inputs.input_ids.shape[-1]:]
     response = processor.batch_decode(outputs, skip_special_tokens=True)[0]
 
     chat_model.cpu()
     torch.cuda.empty_cache()
-    
+
     return response
 
-    
+
 def chat(history, user_input, user_image):
     if user_image is not None:
         # Use Emu3-Chat for vision-language understanding
@@ -191,11 +190,11 @@ def chat(history, user_input, user_image):
 
     return history, history, gr.update(value=None)
 
-    
+
 def clear_input():
     return gr.update(value="")
 
-    
+
 with gr.Blocks() as demo:
     gr.Markdown("# Emu3 Chatbot Demo")
     gr.Markdown(

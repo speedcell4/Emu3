@@ -2,21 +2,16 @@
 # https://cog.run/python
 
 import os
-import time
 import subprocess
-from PIL import Image
-from transformers import (
-    AutoTokenizer,
-    AutoModel,
-    AutoImageProcessor,
-    AutoModelForCausalLM,
-)
-from transformers.generation.configuration_utils import GenerationConfig
+import time
+
 import torch
+from PIL import Image
 from cog import BasePredictor, Input, Path
+from transformers import (AutoImageProcessor, AutoModel, AutoModelForCausalLM, AutoTokenizer)
+from transformers.generation.configuration_utils import GenerationConfig
 
 from emu3.mllm.processing_emu3 import Emu3Processor
-
 
 MODEL_CACHE = "model_cache_chat"
 MODEL_URL = (
@@ -78,29 +73,29 @@ class Predictor(BasePredictor):
         )
 
     def predict(
-        self,
-        text: str = Input(
-            description="Input prompt",
-            default="Please describe the image.",
-        ),
-        image: Path = Input(
-            default="Input image",
-        ),
-        temperature: float = Input(
-            description="Controls randomness. Lower values make the model more deterministic, higher values make it more random.",
-            default=0.7,
-            ge=0.0,
-            le=1.0,
-        ),
-        top_p: float = Input(
-            description="Controls diversity of the output. Valid when temperature > 0. Lower values make the output more focused, higher values make it more diverse.",
-            default=0.9,
-            ge=0.0,
-            le=1.0,
-        ),
-        max_new_tokens: int = Input(
-            description="Maximum number of tokens to generate", default=256, ge=1
-        ),
+            self,
+            text: str = Input(
+                description="Input prompt",
+                default="Please describe the image.",
+            ),
+            image: Path = Input(
+                default="Input image",
+            ),
+            temperature: float = Input(
+                description="Controls randomness. Lower values make the model more deterministic, higher values make it more random.",
+                default=0.7,
+                ge=0.0,
+                le=1.0,
+            ),
+            top_p: float = Input(
+                description="Controls diversity of the output. Valid when temperature > 0. Lower values make the output more focused, higher values make it more diverse.",
+                default=0.9,
+                ge=0.0,
+                le=1.0,
+            ),
+            max_new_tokens: int = Input(
+                description="Maximum number of tokens to generate", default=256, ge=1
+            ),
     ) -> str:
         """Run a single prediction on the model"""
 
@@ -123,5 +118,5 @@ class Predictor(BasePredictor):
             top_p=top_p,
         )
 
-        outputs = outputs[:, inputs.input_ids.shape[-1] :]
+        outputs = outputs[:, inputs.input_ids.shape[-1]:]
         return self.processor.batch_decode(outputs, skip_special_tokens=True)[0]

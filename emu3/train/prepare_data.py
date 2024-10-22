@@ -4,10 +4,10 @@ import argparse
 import json
 import os
 
-from PIL import Image
 import torch
+from PIL import Image
 
-from emu3.tokenizer import Emu3VisionVQModel, Emu3VisionVQImageProcessor
+from emu3.tokenizer import Emu3VisionVQImageProcessor, Emu3VisionVQModel
 
 
 def prepare_args():

@@ -13,10 +13,15 @@
 <img src="./assets/arch.png" class="interpolation-image" alt="arch." height="80%" width="70%" />
 </div>
 
-We introduce **Emu3**, a new suite of state-of-the-art multimodal models trained solely with **<i>next-token prediction</i>**! By tokenizing images, text, and videos into a discrete space, we train a single transformer from scratch on a mixture of multimodal sequences.
+We introduce **Emu3**, a new suite of state-of-the-art multimodal models trained solely with **<i>next-token
+prediction</i>**! By tokenizing images, text, and videos into a discrete space, we train a single transformer from
+scratch on a mixture of multimodal sequences.
 
 ### Emu3 excels in both generation and perception
-**Emu3** outperforms several well-established task-specific models in both generation and perception tasks, surpassing flagship open models such as SDXL, LLaVA-1.6 and OpenSora-1.2, while eliminating the need for diffusion or compositional architectures.
+
+**Emu3** outperforms several well-established task-specific models in both generation and perception tasks, surpassing
+flagship open models such as SDXL, LLaVA-1.6 and OpenSora-1.2, while eliminating the need for diffusion or compositional
+architectures.
 
 <div align='center'>
 <img src="./assets/comparison.png" class="interpolation-image" alt="comparison." height="80%" width="80%" />
@@ -24,15 +29,24 @@ We introduce **Emu3**, a new suite of state-of-the-art multimodal models trained
 
 ### Highlights
 
-- **Emu3** is capable of generating high-quality images following the text input, by simply predicting the next vision token. The model naturally supports flexible resolutions and styles.
-- **Emu3** shows strong vision-language understanding capabilities to see the physical world and provides coherent text responses. Notably, this capability is achieved without depending on a CLIP and a pretrained LLM.
-- **Emu3** simply generates a video causally by predicting the next token in a video sequence, unlike the video diffusion model as in Sora. With a video in context, Emu3 can also naturally extend the video and predict what will happen next. 
+- **Emu3** is capable of generating high-quality images following the text input, by simply predicting the next vision
+  token. The model naturally supports flexible resolutions and styles.
+- **Emu3** shows strong vision-language understanding capabilities to see the physical world and provides coherent text
+  responses. Notably, this capability is achieved without depending on a CLIP and a pretrained LLM.
+- **Emu3** simply generates a video causally by predicting the next token in a video sequence, unlike the video
+  diffusion model as in Sora. With a video in context, Emu3 can also naturally extend the video and predict what will
+  happen next.
 
 ## News
-- 2024.10 We release the image pretrained model **[Emu3-Stage1](https://huggingface.co/BAAI/Emu3-Stage1)** and the sft scripts. The model supports image captioning and can generate images at a resolution of 512x512. You can use our training scripts for further instruction tuning for more image generation and perception tasks. 🔥🔥🔥
-- 2024.09 We relase **[Emu3-Chat](https://huggingface.co/BAAI/Emu3-Chat)** and **[Emu3-Gen](https://huggingface.co/BAAI/Emu3-Gen)** which are post training models separately for vision-language understanding and vision generation.
-- 2024.09 We introduce Emu3, a new suite of state-of-the-art multimodal models trained solely with next-token prediction.
 
+- 2024.10 We release the image pretrained model **[Emu3-Stage1](https://huggingface.co/BAAI/Emu3-Stage1)** and the sft
+  scripts. The model supports image captioning and can generate images at a resolution of 512x512. You can use our
+  training scripts for further instruction tuning for more image generation and perception tasks. 🔥🔥🔥
+- 2024.09 We relase **[Emu3-Chat](https://huggingface.co/BAAI/Emu3-Chat)** and *
+  *[Emu3-Gen](https://huggingface.co/BAAI/Emu3-Gen)** which are post training models separately for vision-language
+  understanding and vision generation.
+- 2024.09 We introduce Emu3, a new suite of state-of-the-art multimodal models trained solely with next-token
+  prediction.
 
 ### TODO
 
@@ -41,7 +55,6 @@ We introduce **Emu3**, a new suite of state-of-the-art multimodal models trained
 - [ ] Release the evaluation code.
 - [X] Release training scripts for sft.
 - [ ] Release training scripts for pretrain and dpo.
-
 
 ### Setup
 
@@ -56,15 +69,16 @@ pip install -r requirements.txt
 
 ### Model Weights
 
-| Model name         | HF Weight                                               | Modelscope |
-| ------------------ | ------------------------------------------------------- | -------------------------------------------------------------- |
-| **Emu3-Chat**      | [🤗 HF link](https://huggingface.co/BAAI/Emu3-Chat)     | [Modelscope link](https://modelscope.cn/models/BAAI/Emu3-Chat) |
-| **Emu3-Gen**       | [🤗 HF link](https://huggingface.co/BAAI/Emu3-Gen)      | [Modelscope link](https://modelscope.cn/models/BAAI/Emu3-Gen)  |
-| **Emu3-VisionTokenizer**           | [🤗 HF link](https://huggingface.co/BAAI/Emu3-VisionTokenizer)          | [Modelscope link](https://modelscope.cn/models/BAAI/Emu3-VisionTokenizer) |
+| Model name               | HF Weight                                                      | Modelscope                                                                |
+|--------------------------|----------------------------------------------------------------|---------------------------------------------------------------------------|
+| **Emu3-Chat**            | [🤗 HF link](https://huggingface.co/BAAI/Emu3-Chat)            | [Modelscope link](https://modelscope.cn/models/BAAI/Emu3-Chat)            |
+| **Emu3-Gen**             | [🤗 HF link](https://huggingface.co/BAAI/Emu3-Gen)             | [Modelscope link](https://modelscope.cn/models/BAAI/Emu3-Gen)             |
+| **Emu3-VisionTokenizer** | [🤗 HF link](https://huggingface.co/BAAI/Emu3-VisionTokenizer) | [Modelscope link](https://modelscope.cn/models/BAAI/Emu3-VisionTokenizer) |
 
 ### Quickstart
 
 #### Use 🤗Transformers to run Emu3-Gen for image generation
+
 ```python
 from PIL import Image
 from transformers import AutoTokenizer, AutoModel, AutoImageProcessor, AutoModelForCausalLM
@@ -205,6 +219,7 @@ print(processor.batch_decode(outputs, skip_special_tokens=True)[0])
 ```
 
 #### Use 🤗Transformers to run Emu3-VisionTokenzier for vision encoding and decoding
+
 ```python
 import os
 import os.path as osp
@@ -263,7 +278,9 @@ for idx, im in enumerate(recon_images):
 
 ## Acknowledgement
 
-We thank the great work from [Emu Series](https://github.com/baaivision/Emu), [QWen2-VL](https://github.com/QwenLM/Qwen2-VL) and [MoVQGAN](https://github.com/ai-forever/MoVQGAN)
+We thank the great work
+from [Emu Series](https://github.com/baaivision/Emu), [QWen2-VL](https://github.com/QwenLM/Qwen2-VL)
+and [MoVQGAN](https://github.com/ai-forever/MoVQGAN)
 
 ## Citation
 

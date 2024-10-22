@@ -16,19 +16,20 @@
 
 import torch
 
+
 class Emu3PrefixConstrainedLogitsHelper:
 
     def __init__(
-        self,
-        height,
-        width,
-        img_token,
-        eoi_token,
-        eos_token,
-        eol_token,
-        eof_token,
-        pad_token,
-        visual_tokens,
+            self,
+            height,
+            width,
+            img_token,
+            eoi_token,
+            eos_token,
+            eol_token,
+            eof_token,
+            pad_token,
+            visual_tokens,
     ):
         self.height = height
         self.width = width
@@ -55,14 +56,14 @@ class Emu3PrefixConstrainedLogitsHelper:
         width = width.to(offset.device)
 
         if offset % (width + 1) == 0:
-            return (self.eol_token, )
+            return (self.eol_token,)
         elif offset == (width + 1) * height + 1:
-            return (self.eof_token, )
+            return (self.eof_token,)
         elif offset == (width + 1) * height + 2:
-            return (self.eoi_token, )
+            return (self.eoi_token,)
         elif offset == (width + 1) * height + 3:
-            return (self.eos_token, )
+            return (self.eos_token,)
         elif offset > (width + 1) * height + 3:
-            return (self.pad_token, )
+            return (self.pad_token,)
         else:
             return self.visual_tokens

@@ -2,26 +2,21 @@
 # https://cog.run/python
 
 import os
-import time
 import subprocess
+import time
+
+import torch
 from PIL import Image
-from transformers import (
-    AutoTokenizer,
-    AutoModel,
-    AutoImageProcessor,
-    AutoModelForCausalLM,
-)
-from transformers.generation.configuration_utils import GenerationConfig
+from cog import BasePredictor, Input, Path
+from transformers import (AutoImageProcessor, AutoModel, AutoModelForCausalLM, AutoTokenizer)
 from transformers.generation import (
     LogitsProcessorList,
     PrefixConstrainedLogitsProcessor,
     UnbatchedClassifierFreeGuidanceLogitsProcessor,
 )
-import torch
-from cog import BasePredictor, Input, Path
+from transformers.generation.configuration_utils import GenerationConfig
 
 from emu3.mllm.processing_emu3 import Emu3Processor
-
 
 MODEL_CACHE = "model_cache"
 MODEL_URL = (
@@ -94,21 +89,21 @@ class Predictor(BasePredictor):
         )
 
     def predict(
-        self,
-        prompt: str = Input(
-            description="Input prompt",
-            default="a portrait of young girl.",
-        ),
-        positive_prompt: str = Input(
-            default="masterpiece, film grained, best quality.",
-        ),
-        negative_prompt: str = Input(
-            description="Specify things to not see in the output",
-            default="lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry.",
-        ),
-        guidance_scale: float = Input(
-            description="Scale for classifier-free guidance", ge=1, le=20, default=3
-        ),
+            self,
+            prompt: str = Input(
+                description="Input prompt",
+                default="a portrait of young girl.",
+            ),
+            positive_prompt: str = Input(
+                default="masterpiece, film grained, best quality.",
+            ),
+            negative_prompt: str = Input(
+                description="Specify things to not see in the output",
+                default="lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry.",
+            ),
+            guidance_scale: float = Input(
+                description="Scale for classifier-free guidance", ge=1, le=20, default=3
+            ),
     ) -> Path:
         """Run a single prediction on the model"""
 

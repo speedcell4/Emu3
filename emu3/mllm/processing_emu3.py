@@ -1,4 +1,4 @@
-# coding=utf-8
+# coding=utf-8
 # Copyright 2024 The Emu team, BAAI and The HuggingFace Inc. team. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,22 +14,20 @@
 # limitations under the License.
 """ Processor class for Emu3. """
 
-from math import ceil
 import re
-from typing import List, Optional, Sequence, Union
 from functools import partial
+from math import ceil
+from typing import List, Optional, Sequence
 
-from PIL import Image
 import torch
+from PIL import Image
 from torch.nn import functional as F
 from transformers.feature_extraction_utils import BatchFeature
-from transformers.image_utils import ImageInput, get_image_size, to_numpy_array
-from transformers.processing_utils import ProcessingKwargs, ProcessorMixin
-from transformers.tokenization_utils_base import TextInput, PreTokenizedInput
+from transformers.processing_utils import ProcessorMixin
+from transformers.tokenization_utils_base import PreTokenizedInput, TextInput
 from transformers.utils import logging
 
 from .utils_emu3 import Emu3PrefixConstrainedLogitsHelper
-
 
 logger = logging.get_logger(__name__)
 
@@ -61,14 +59,14 @@ class Emu3Processor(ProcessorMixin):
     tokenizer_class = "AutoTokenizer"
 
     def __init__(
-        self,
-        image_processor=None,
-        vision_tokenizer=None,
-        tokenizer=None,
-        chat_template="You are a helpful assistant. USER: {image_prompt}{text_prompt}. ASSISTANT:",
-        prefix_template="{H}*{W}",
-        visual_template=("<|visual token {token_id:0>6d}|>", r"<\|visual token (\d+)\|>"),
-        **kwargs,
+            self,
+            image_processor=None,
+            vision_tokenizer=None,
+            tokenizer=None,
+            chat_template="You are a helpful assistant. USER: {image_prompt}{text_prompt}. ASSISTANT:",
+            prefix_template="{H}*{W}",
+            visual_template=("<|visual token {token_id:0>6d}|>", r"<\|visual token (\d+)\|>"),
+            **kwargs,
     ):
         assert vision_tokenizer is not None, "image tokenizer can not be None"
 
@@ -82,15 +80,15 @@ class Emu3Processor(ProcessorMixin):
 
     @torch.no_grad()
     def __call__(
-        self,
-        text: Optional[TextInput | PreTokenizedInput] = None,
-        image: Optional[Image.Image | List[Image.Image]] = None,
-        *,
-        mode: str = "G",
-        ratio: str | List[str] = "1:1",
-        image_area: int = 518400,
-        padding_image: bool = False,
-        **kwargs,
+            self,
+            text: Optional[TextInput | PreTokenizedInput] = None,
+            image: Optional[Image.Image | List[Image.Image]] = None,
+            *,
+            mode: str = "G",
+            ratio: str | List[str] = "1:1",
+            image_area: int = 518400,
+            padding_image: bool = False,
+            **kwargs,
     ) -> BatchFeature:
         """
         Main method to prepare for the model one or several sequences(s) and image(s). This method forwards the `text`
@@ -164,21 +162,21 @@ class Emu3Processor(ProcessorMixin):
                 h, w = image_tokens[idx].shape
                 imgstr = self.to_imgstr(image_tokens[idx])
                 image_prompt = (
-                    self.tokenizer.boi_token +
-                    self.prefix_template.format(H=h, W=w) +
-                    self.tokenizer.img_token + 
-                    imgstr +
-                    self.tokenizer.eol_token +
-                    self.tokenizer.eof_token +
-                    self.tokenizer.eoi_token
+                        self.tokenizer.boi_token +
+                        self.prefix_template.format(H=h, W=w) +
+                        self.tokenizer.img_token +
+                        imgstr +
+                        self.tokenizer.eol_token +
+                        self.tokenizer.eof_token +
+                        self.tokenizer.eoi_token
                 )
                 prompt += self.chat_template.format(image_prompt=image_prompt, text_prompt=text_prompt)
             else:
                 h, w = self.calculate_generate_size(ratio[idx], image_area, self.vision_tokenizer.spatial_scale_factor)
                 image_prompt = (
-                    self.tokenizer.boi_token +
-                    self.prefix_template.format(H=h, W=w) +
-                    self.tokenizer.img_token
+                        self.tokenizer.boi_token +
+                        self.prefix_template.format(H=h, W=w) +
+                        self.tokenizer.img_token
                 )
                 prompt += (text_prompt + image_prompt)
 
@@ -285,7 +283,8 @@ class Emu3Processor(ProcessorMixin):
             image_inputs = torch.cat(image_inputs, dim=0).to(self.vision_tokenizer.device, self.vision_tokenizer.dtype)
             image_tokens = self.vision_tokenizer.encode(image_inputs)
             image_tokens = [
-                im_tok[:ceil(im_shape[0] / self.vis_tok_spatial_factor), :ceil(im_shape[1] / self.vis_tok_spatial_factor)]
+                im_tok[:ceil(im_shape[0] / self.vis_tok_spatial_factor),
+                :ceil(im_shape[1] / self.vis_tok_spatial_factor)]
                 for im_tok, im_shape in zip(image_tokens, image_shapes)
             ]
         else:
